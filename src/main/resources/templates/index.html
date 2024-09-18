@@ -27,6 +27,12 @@
                     <td th:text="${todo.deadline}"></td>
                     <td th:text="${todo.completed}"></td>
                     <td th:text="${todo.userId}"></td>
+                    <td>
+                        <div>
+                            <a th:href="@{/todos/{id} (id=${todo.id})}">Edit</a>
+                            <a th:href="@{/todos/{id} (id=${todo.id})}">Delete</a>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
