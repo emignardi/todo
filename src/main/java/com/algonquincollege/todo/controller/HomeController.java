@@ -19,7 +19,7 @@ public class HomeController {
     }
 
     @GetMapping("/create-todo")
-    public String createTodo(Model model) {
+    public String createTodo() {
         return "create-todo";
     }
 }
