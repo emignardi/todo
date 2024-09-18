@@ -3,9 +3,11 @@ package com.algonquincollege.todo.controller;
 import com.algonquincollege.todo.model.User;
 import com.algonquincollege.todo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,27 +16,27 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users/{id}")
-    public User findById(@PathVariable int id) {
-        return userService.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+    public ResponseEntity<Optional<User>> findById(@PathVariable int id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @GetMapping("/users")
-    public List<User> findAll() {
-        return userService.findAll();
+    public ResponseEntity<List<User>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @PostMapping("/users")
-    public User save(@RequestBody User user) {
-        return userService.save(user);
+    public ResponseEntity<User> save(@RequestBody User user) {
+        return ResponseEntity.ok(userService.save(user));
     }
 
     @PutMapping("users/{id}")
-    public User update(@PathVariable int id, @RequestBody User user) {
-        return userService.update(id, user);
+    public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user) {
+        return ResponseEntity.ok(userService.update(id, user));
     }
 
     @DeleteMapping("/users/{id}")
-    public User delete(@PathVariable int id) {
-        return userService.delete(id);
+    public ResponseEntity<User> delete(@PathVariable int id) {
+        return ResponseEntity.ok(userService.delete(id));
     }
 }
