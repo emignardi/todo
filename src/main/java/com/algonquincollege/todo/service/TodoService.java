@@ -31,9 +31,7 @@ public class TodoService {
         if (optionalTodo.isPresent()) {
             Todo updatedTodo = optionalTodo.get();
             updatedTodo.setTitle(todo.getTitle());
-            updatedTodo.setDescription(todo.getDescription());
             updatedTodo.setDeadline(todo.getDeadline());
-            updatedTodo.setCompleted(todo.isCompleted());
             return todoRepository.save(updatedTodo);
         }
         return null;

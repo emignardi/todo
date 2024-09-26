@@ -19,11 +19,7 @@ public class Todo implements Serializable {
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
-    private String description;
-    @Column(nullable = false)
     private Date deadline;
-    @Column(nullable = false)
-    private boolean completed;
     @Column(name = "user_id", nullable = false)
     private int userId;
 }
