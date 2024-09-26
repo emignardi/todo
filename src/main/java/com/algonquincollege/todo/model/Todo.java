@@ -17,7 +17,9 @@ public class Todo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
-    private String title;
+    private String task;
+    @Column(nullable = false)
+    private String category;
     @Column(nullable = false)
     private Date deadline;
     @Column(name = "user_id", nullable = false)

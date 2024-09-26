@@ -17,9 +17,4 @@ public class HomeController {
         model.addAttribute("todos", todoService.findAll());
         return "index";
     }
-
-    @GetMapping("/create-todo")
-    public String createTodo() {
-        return "create-todo";
-    }
 }

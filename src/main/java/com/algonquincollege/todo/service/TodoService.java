@@ -30,7 +30,8 @@ public class TodoService {
         Optional<Todo> optionalTodo = todoRepository.findById(id);
         if (optionalTodo.isPresent()) {
             Todo updatedTodo = optionalTodo.get();
-            updatedTodo.setTitle(todo.getTitle());
+            updatedTodo.setTask(todo.getTask());
+            updatedTodo.setCategory(todo.getCategory());
             updatedTodo.setDeadline(todo.getDeadline());
             return todoRepository.save(updatedTodo);
         }

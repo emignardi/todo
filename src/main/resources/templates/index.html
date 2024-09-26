@@ -13,20 +13,16 @@
         <table>
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Description</th>
+                    <th>Task</th>
+                    <th>Category</th>
                     <th>Deadline</th>
-                    <th>Completed</th>
-                    <th>User ID</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="todo : ${todos}">
-                    <td th:text="${todo.title}"></td>
-                    <td th:text="${todo.description}"></td>
+                    <td th:text="${todo.task}"></td>
+                    <td th:text="${todo.category}"></td>
                     <td th:text="${todo.deadline}"></td>
-                    <td th:text="${todo.completed}"></td>
-                    <td th:text="${todo.userId}"></td>
                     <td>
                         <div>
                             <a th:href="@{/todos/{id} (id=${todo.id})}">Edit</a>
