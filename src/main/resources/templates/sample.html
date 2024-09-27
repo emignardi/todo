@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todo</title>
+</head>
+<body>
+    <h1>Todo</h1>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Category</th>
+                    <th>Deadline</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="todo : ${todos}">
+                    <td th:text="${todo.task}"></td>
+                    <td th:text="${todo.category}"></td>
+                    <td th:text="${todo.deadline}"></td>
+                    <td>
+                        <div>
+                            <a th:href="@{/todos/{id} (id=${todo.id})}">Edit</a>
+                            <a th:href="@{/todos/{id} (id=${todo.id})}">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

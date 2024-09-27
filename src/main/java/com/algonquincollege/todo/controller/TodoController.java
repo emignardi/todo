@@ -25,6 +25,11 @@ public class TodoController {
         return ResponseEntity.ok(todoService.findById(id));
     }
 
+    @GetMapping("/todos/{task}")
+    public ResponseEntity<Optional<Todo>> findByTask(@PathVariable String task) {
+        return ResponseEntity.ok(todoService.findByTask(task));
+    }
+
     @PostMapping("/todos")
     public ResponseEntity<Todo> create (@RequestBody Todo todo) {
         return ResponseEntity.ok(todoService.save(todo));
@@ -35,8 +40,14 @@ public class TodoController {
         return ResponseEntity.ok(todoService.update(id, todo));
     }
 
-    @DeleteMapping("/todos/{id}")
-    public ResponseEntity<Todo> delete (@PathVariable int id) {
-        return ResponseEntity.ok(todoService.delete(id));
+    // Ambiguous Mapping
+//    @DeleteMapping("/todos/{id}")
+//    public ResponseEntity<Todo> delete (@PathVariable int id) {
+//        return ResponseEntity.ok(todoService.delete(id));
+//    }
+
+    @DeleteMapping("/todos/{task}")
+    public ResponseEntity<Todo> delete (@PathVariable String task) {
+        return ResponseEntity.ok(todoService.delete(task));
     }
 }

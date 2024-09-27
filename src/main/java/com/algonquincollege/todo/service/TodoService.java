@@ -22,6 +22,10 @@ public class TodoService {
         return todoRepository.findById(id);
     }
 
+    public Optional<Todo> findByTask(String task) {
+        return todoRepository.findByTask(task);
+    }
+
     public Todo save(Todo todo) {
         return todoRepository.save(todo);
     }
@@ -39,11 +43,14 @@ public class TodoService {
     }
 
     public Todo delete(int id) {
-        Optional<Todo> optionalTodo = todoRepository.findById(id);
-        if (optionalTodo.isPresent()) {
-            Todo deletedTodo = optionalTodo.get();
-            todoRepository.delete(deletedTodo);
-        }
-        return null;
+        Todo todo = todoRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        todoRepository.delete(todo);
+        return todo;
+    }
+
+    public Todo delete(String task) {
+        Todo todo = todoRepository.findByTask(task).orElseThrow(IllegalArgumentException::new);
+        todoRepository.delete(todo);
+        return todo;
     }
 }

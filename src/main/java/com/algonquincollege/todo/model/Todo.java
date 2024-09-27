@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,7 +21,5 @@ public class Todo implements Serializable {
     @Column(nullable = false)
     private String category;
     @Column(nullable = false)
-    private Date deadline;
-    @Column(name = "user_id", nullable = false)
-    private int userId;
+    private LocalDate deadline;
 }

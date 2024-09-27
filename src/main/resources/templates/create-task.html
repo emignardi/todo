@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Current To-Do List</title>
+    <title>Add a Task</title>
     <style>
         * {
             margin: 0;
@@ -139,14 +139,27 @@
     <button id="logout">Log out</button>
 
     <div class="container">
-        <h1>Your Current To-Do List</h1>
-        <button id="sort-by-deadline">Sort by Deadline</button>
-        <ul id="task-list"></ul>
+        <h1>Add a New Task</h1>
+        
+        <!-- To-Do List Input Only -->
+        <div class="input-container">
+            <input type="text" id="new-task" placeholder="Add a new task...">
+            <select id="task-category">
+                <option value="Personal">Personal</option>
+                <option value="School">School</option>
+                <option value="Work">Work</option>
+                <option value="Appointment">Appointment</option>
+            </select>
+            <input type="date" id="task-deadline">
+            <button id="add-task-btn">Add Task</button>
+        </div>
     </div>
 
     <script>
-        const taskList = document.getElementById('task-list');
-        const sortByDeadlineButton = document.getElementById('sort-by-deadline');
+        const newTaskInput = document.getElementById('new-task');
+        const addTaskButton = document.getElementById('add-task-btn');
+        const taskCategory = document.getElementById('task-category');
+        const taskDeadline = document.getElementById('task-deadline');
         const logoutButton = document.getElementById('logout');
 
         // Redirect to login_signup.html on log out
@@ -154,72 +167,31 @@
             window.location.href = 'login_signup.html';
         });
 
-        // Load tasks from localStorage and display them
-        window.onload = function() {
-            displayTasks();
-        };
+        // Load tasks from localStorage when the page loads
+        window.onload = function() {};
 
-        // Sort tasks by deadline when the sort button is clicked
-        sortByDeadlineButton.addEventListener('click', function() {
-            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-            tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
-            localStorage.setItem('tasks', JSON.stringify(tasks)); // Update localStorage after sorting
-            displayTasks(); // Re-render the task list
+        addTaskButton.addEventListener('click', function () {
+            const taskText = newTaskInput.value.trim();
+            const category = taskCategory.value;
+            const deadline = taskDeadline.value;
+
+            if (taskText === '') return;
+
+            saveTodo(taskText, category, deadline);
+
+            newTaskInput.value = '';
+            taskCategory.value = 'Personal';
+            taskDeadline.value = '';
         });
 
-        async function displayTasks() {
-            taskList.innerHTML = ''; // Clear the task list first
-            const response = await fetch("/todos")
-                .then((response) => response.json())
-                .then((data) => {
-                    data.forEach(task => {
-                        const taskItem = document.createElement('li');
-                        taskItem.classList.add('task-item');
-
-                        const taskTextSpan = document.createElement('span');
-                        taskTextSpan.textContent = `${task.task} - ${task.category} - due by ${task.deadline}`;
-
-                        // Create buttons for modifying and deleting tasks
-                        const modifyButton = document.createElement('button');
-                        modifyButton.textContent = 'Modify';
-                        modifyButton.addEventListener('click', function() {
-                            modifyTask(task.task, task.category, task.deadline);
-                        });
-
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Delete';
-                        deleteButton.addEventListener('click', function() {
-                            deleteTask(task.task);
-                            displayTasks(); // Refresh the task list
-                        });
-
-                        taskItem.appendChild(taskTextSpan);
-                        taskItem.appendChild(modifyButton);
-                        taskItem.appendChild(deleteButton);
-                        taskList.appendChild(taskItem);
-                    });
-                });
-        }
-
-        function modifyTask(text, category, deadline) {
-            const newText = prompt("Modify task text:", text);
-            const newCategory = prompt("Modify task category:", category);
-            const newDeadline = prompt("Modify task deadline (YYYY-MM-DD):", deadline);
-
-            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-            tasks = tasks.map(task => {
-                if (task.text === text) {
-                    return { text: newText || task.text, category: newCategory || task.category, deadline: newDeadline || task.deadline };
-                }
-                return task;
-            });
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            displayTasks(); // Refresh the task list
-        }
-
-        async function deleteTask(task) {
-            await fetch("/todos/" + task, {
-                method: "DELETE",
+        async function saveTodo(text, category, deadline) {
+            await fetch("/todos", {
+                method: "POST",
+                body: JSON.stringify({
+                    task: text,
+                    category: category,
+                    deadline: deadline
+                }),
                 headers: {
                     "Content-type": "application/json"
                 }
