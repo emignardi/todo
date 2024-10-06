@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @ToString
 @Table(name = "Todo")
 public class Todo implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,4 +21,5 @@ public class Todo implements Serializable {
     private String category;
     @Column(nullable = false)
     private LocalDate deadline;
+//    private int userId;
 }

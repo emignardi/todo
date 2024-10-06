@@ -13,7 +13,6 @@ import java.io.Serializable;
 @ToString
 @Table(name = "User")
 public class User implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,7 +20,7 @@ public class User implements Serializable {
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
     private String password;
