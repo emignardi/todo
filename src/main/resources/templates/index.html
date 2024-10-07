@@ -72,35 +72,6 @@
             background-color: #5a9bd3;
         }
 
-        .input-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .input-container input, .input-container select {
-            width: calc(70% - 10px);
-            padding: 10px;
-            border: 2px solid #4682b4;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        #add-task-btn {
-            width: 30%;
-            background-color: #4682b4;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #add-task-btn:hover {
-            background-color: #5a9bd3;
-        }
-
         #task-list {
             list-style: none;
         }
@@ -151,7 +122,7 @@
 
     // Redirect to login_signup.html on log out
     logoutButton.addEventListener('click', function() {
-        window.location.href = 'login_signup.html';
+        window.location.href = '/logout';
     });
 
     // Load tasks from localStorage and display them
@@ -183,13 +154,13 @@
                     const modifyButton = document.createElement('button');
                     modifyButton.textContent = 'Modify';
                     modifyButton.addEventListener('click', function() {
-                        modifyTask(task.task, task.category, task.deadline);
+                        modifyTask(task.id, task.task, task.category, task.deadline); // Pass task.id
                     });
 
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Delete';
                     deleteButton.addEventListener('click', function() {
-                        deleteTask(task.task);
+                        deleteTask(task.id); // Pass task.id
                         displayTasks(); // Refresh the task list
                     });
 
@@ -201,24 +172,39 @@
             });
     }
 
-    function modifyTask(text, category, deadline) {
+    async function modifyTask(taskId, text, category, deadline) {
         const newText = prompt("Modify task text:", text);
         const newCategory = prompt("Modify task category:", category);
         const newDeadline = prompt("Modify task deadline (YYYY-MM-DD):", deadline);
 
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks = tasks.map(task => {
-            if (task.text === text) {
-                return { text: newText || task.text, category: newCategory || task.category, deadline: newDeadline || task.deadline };
+        const updatedTask = {
+            task: newText || text,
+            category: newCategory || category,
+            deadline: newDeadline || deadline
+        };
+
+        try {
+            const response = await fetch(`/todos/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedTask)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-            return task;
-        });
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-        displayTasks(); // Refresh the task list
+
+            await response.json(); // Optionally process the response
+            displayTasks(); // Refresh the task list
+        } catch (error) {
+            console.error('Error modifying task:', error);
+        }
     }
 
-    async function deleteTask(task) {
-        await fetch("/todos/" + task, {
+    async function deleteTask(taskId) {
+        await fetch(`/todos/${taskId}`, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json"
