@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,16 +29,11 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers("/registration**", "/register").permitAll();
-                    request.requestMatchers("/").hasRole("ADMIN");
-//                    request.requestMatchers("/user").hasRole("USER");
+                    request.requestMatchers("/registration","/register").permitAll();
+                    request.requestMatchers("/","/create-task").hasAnyRole("USER","ADMIN");
                     request.anyRequest().authenticated();
                 })
-                .formLogin(httpSecurityFormLoginConfigurer -> {
-                    httpSecurityFormLoginConfigurer
-                            .successHandler(new AuthenticationSuccessHandler())
-                            .permitAll();
-                })
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .build();
     }
 

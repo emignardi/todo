@@ -2,6 +2,7 @@ package com.algonquincollege.todo.controller;
 
 import com.algonquincollege.todo.model.User;
 import com.algonquincollege.todo.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,10 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<User> delete(@PathVariable Long id) {
         return ResponseEntity.ok(userService.delete(id));
+    }
+
+    @GetMapping("/current-user")
+    public String findCurrentUserId(HttpServletRequest request) {
+        return request.getUserPrincipal().getName();
     }
 }
