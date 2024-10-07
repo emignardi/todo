@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,8 +13,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Optional<User> findById(int id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
     public List<User> findAll() {
@@ -26,27 +25,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User update(int id, User user) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User updatedUser = optionalUser.get();
-            updatedUser.setFirstName(user.getFirstName());
-            updatedUser.setLastName(user.getLastName());
-            updatedUser.setUsername(user.getUsername());
-            updatedUser.setPassword(user.getPassword());
-            return userRepository.save(updatedUser);
-        }
-        return null;
+    public User update(Long id, User user) {
+        return userRepository.findById(id)
+                .map(updatedUser -> {
+                    updatedUser.setFirstName(user.getFirstName());
+                    updatedUser.setLastName(user.getLastName());
+                    return userRepository.save(updatedUser);
+                }).orElseThrow(IllegalArgumentException::new);
     }
 
-    public User delete(int id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            userRepository.delete(user);
-            return user;
-        }
-        return null;
+    public User delete(Long id) {
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        userRepository.delete(user);
+        return user;
     }
 
 }

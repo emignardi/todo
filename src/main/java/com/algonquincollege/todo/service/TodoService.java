@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,31 +17,28 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
-    public Optional<Todo> findById(int id) {
-        return todoRepository.findById(id);
+    public Todo findById(Long id) {
+        return todoRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
-    public Optional<Todo> findByTask(String task) {
-        return todoRepository.findByTask(task);
+    public Todo findByTask(String task) {
+        return todoRepository.findByTask(task).orElseThrow(IllegalArgumentException::new);
     }
 
     public Todo save(Todo todo) {
         return todoRepository.save(todo);
     }
 
-    public Todo update(int id, Todo todo) {
-        Optional<Todo> optionalTodo = todoRepository.findById(id);
-        if (optionalTodo.isPresent()) {
-            Todo updatedTodo = optionalTodo.get();
-            updatedTodo.setTask(todo.getTask());
-            updatedTodo.setCategory(todo.getCategory());
-            updatedTodo.setDeadline(todo.getDeadline());
-            return todoRepository.save(updatedTodo);
-        }
-        return null;
+    public Todo update(Long id, Todo todo) {
+        Todo updatedTodo = todoRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        updatedTodo.setTask(todo.getTask());
+        updatedTodo.setCategory(todo.getCategory());
+        updatedTodo.setDeadline(todo.getDeadline());
+        todoRepository.save(updatedTodo);
+        return updatedTodo;
     }
 
-    public Todo delete(int id) {
+    public Todo delete(Long id) {
         Todo todo = todoRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         todoRepository.delete(todo);
         return todo;

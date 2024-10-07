@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +15,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<Optional<User>> findById(@PathVariable int id) {
+    public ResponseEntity<User> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
@@ -31,12 +30,12 @@ public class UserController {
     }
 
     @PutMapping("users/{id}")
-    public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user) {
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
         return ResponseEntity.ok(userService.update(id, user));
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<User> delete(@PathVariable int id) {
+    public ResponseEntity<User> delete(@PathVariable Long id) {
         return ResponseEntity.ok(userService.delete(id));
     }
 }

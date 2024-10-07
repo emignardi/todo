@@ -26,4 +26,9 @@ public class HomeController {
     public String createTask() {
         return "create-task";
     }
+
+    @GetMapping("/registration")
+    public String registration() {
+        return "register";
+    }
 }

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Todo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column(nullable = false)
     private String task;
     @Column(nullable = false)

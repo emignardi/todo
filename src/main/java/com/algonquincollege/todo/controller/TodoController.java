@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,12 +20,12 @@ public class TodoController {
     }
 
     @GetMapping("/todos/{id}")
-    public ResponseEntity<Optional<Todo>> findById(@PathVariable int id) {
+    public ResponseEntity<Todo> findById(@PathVariable Long id) {
         return ResponseEntity.ok(todoService.findById(id));
     }
 
     @GetMapping("/todos/{task}")
-    public ResponseEntity<Optional<Todo>> findByTask(@PathVariable String task) {
+    public ResponseEntity<Todo> findByTask(@PathVariable String task) {
         return ResponseEntity.ok(todoService.findByTask(task));
     }
 
@@ -36,7 +35,7 @@ public class TodoController {
     }
 
     @PutMapping("/todos/{id}")
-    public ResponseEntity<Todo> update (@PathVariable int id, @RequestBody Todo todo) {
+    public ResponseEntity<Todo> update (@PathVariable Long id, @RequestBody Todo todo) {
         return ResponseEntity.ok(todoService.update(id, todo));
     }
 

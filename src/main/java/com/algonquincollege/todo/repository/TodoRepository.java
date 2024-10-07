@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TodoRepository extends JpaRepository<Todo, Integer> {
+public interface TodoRepository extends JpaRepository<Todo, Long> {
     Optional<Todo> findByTask(String task);
 }
