@@ -21,5 +21,4 @@ public class Todo implements Serializable {
     private String category;
     @Column(nullable = false)
     private LocalDate deadline;
-//    private int userId;
 }
