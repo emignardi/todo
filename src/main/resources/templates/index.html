@@ -160,8 +160,9 @@
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Delete';
                     deleteButton.addEventListener('click', function() {
-                        deleteTask(task.id); // Pass task.id
-                        displayTasks(); // Refresh the task list
+                        deleteTask(task.task).then(() => {
+                            displayTasks(); // Refresh the task list after deletion
+                        });
                     });
 
                     taskItem.appendChild(taskTextSpan);
@@ -203,16 +204,21 @@
         }
     }
 
-    async function deleteTask(taskId) {
-        await fetch(`/todos/${taskId}`, {
+    async function deleteTask(task) {
+        const response = await fetch(`/todos/${task}`, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json"
             }
-        })
-            .then((response) => response.json())
-            .then((json) => console.log(json));
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete task');
+        }
+
+        return response.json(); // Return the response to allow chaining
     }
+
 </script>
 </body>
 </html>

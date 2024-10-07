@@ -33,7 +33,10 @@ public class SecurityConfig {
                     request.requestMatchers("/","/create-task").hasAnyRole("USER","ADMIN");
                     request.anyRequest().authenticated();
                 })
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(form -> {
+                    form.permitAll();
+                    form.defaultSuccessUrl("/");
+                })
                 .build();
     }
 
