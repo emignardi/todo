@@ -1,110 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-        }
-        label {
-            margin-top: 10px;
-            display: block;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 15px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        input[type="submit"] {
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 3px;
-            width: 100%;
-        }
-        input[type="submit"]:hover {
-            background-color: #4cae4c;
-        }
-        .message {
-            margin-top: 15px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/register.css">
 </head>
 <body>
+<div class="content">
+  <div class="mark">
+    <div class="login_ipt">
+      <h1 class="title">Hello, Welcome!</h1>
+      <h2 class="sm_title">REGISTER</h2>
 
-<div class="container">
-    <h2>User Registration</h2>
-    <form id="registration-form">
-        <label for="first-name">First Name:</label>
-        <input type="text" id="first-name" name="first_name" required>
+      <label for="first-name">First Name</label>
+      <input type="text" id="first-name" class="ipt" placeholder="First Name" required>
+      <br>
 
-        <label for="last-name">Last Name:</label>
-        <input type="text" id="last-name" name="last_name" required>
+      <label for="last-name">Last Name</label>
+      <input type="text" id="last-name" class="ipt" placeholder="Last Name" required>
+      <br>
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+      <label for="username">Username</label>
+      <input type="text" id="username" class="ipt" placeholder="Username" required>
+      <br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" class="ipt" placeholder="Password" required>
+      <br>
 
-        <input type="submit" value="Register">
-    </form>
-    <div class="message" id="message"></div>
+      <div class="register_con">
+        <a href="/login">Go to login</a>
+      </div>
+      <button class="register_btn" id="register-button">SUBMIT</button>
+      <div id="message"></div> <!-- Added for error/success messages -->
+    </div>
+  </div>
 </div>
 
+<!-- Load JavaScript Files -->
+<script src="/js/utils.js"></script>
+<script src="/js/userManager.js"></script>
 <script>
-    document.getElementById('registration-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+  document.getElementById('register-button').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default form submission
 
-        const formData = {
-            firstName: document.getElementById('first-name').value,
-            lastName: document.getElementById('last-name').value,
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value
-        };
+    const formData = {
+      firstName: document.getElementById('first-name').value,
+      lastName: document.getElementById('last-name').value,
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+    };
 
-        fetch('/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
+    fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert('Registration successful!');
-                    document.getElementById('registration-form').reset();
-                } else {
-                    document.getElementById('message').innerText = data.message || 'Registration failed.';
-                }
+              if (data.success) {
+                alert('Registration successful!');
+                window.location.href = '/login'; // Redirect to login page
+              } else {
+                document.getElementById('message').innerText = data.message || 'Registration failed.';
+              }
             })
             .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('message').innerText = 'An error occurred. Please try again.';
+              console.error('Error:', error);
+              document.getElementById('message').innerText = 'An error occurred. Please try again.';
             });
-    });
+  });
 </script>
 
 </body>

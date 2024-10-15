@@ -29,11 +29,12 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers("/registration","/register").permitAll();
+                    request.requestMatchers("/registration", "/register", "/css/register.css", "/css/style.css", "js/utils.js", "js/userManager.js", "/css/login.css").permitAll();
                     request.requestMatchers("/","/create-task").hasAnyRole("USER","ADMIN");
                     request.anyRequest().authenticated();
                 })
                 .formLogin(form -> {
+                    form.loginPage("/login");
                     form.permitAll();
                     form.defaultSuccessUrl("/");
                 })

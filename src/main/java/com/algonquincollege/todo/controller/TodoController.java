@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,15 @@ public class TodoController {
         return ResponseEntity.ok(todoService.findById(id));
     }
 
+    @GetMapping("/todos/sorted")
+    public ResponseEntity<List<Todo>> findAllSorted() {
+        List<Todo> sortedTodos = todoService.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Todo::getDeadline))
+                .toList();
+        return ResponseEntity.ok(sortedTodos);
+    }
+
     @GetMapping("/todos/{task}")
     public ResponseEntity<Todo> findByTask(@PathVariable String task) {
         return ResponseEntity.ok(todoService.findByTask(task));
@@ -40,13 +50,13 @@ public class TodoController {
     }
 
     // Ambiguous Mapping
-//    @DeleteMapping("/todos/{id}")
-//    public ResponseEntity<Todo> delete (@PathVariable int id) {
-//        return ResponseEntity.ok(todoService.delete(id));
-//    }
-
-    @DeleteMapping("/todos/{task}")
-    public ResponseEntity<Todo> delete (@PathVariable String task) {
-        return ResponseEntity.ok(todoService.delete(task));
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity<Todo> delete (@PathVariable Long id) {
+        return ResponseEntity.ok(todoService.delete(id));
     }
+
+//    @DeleteMapping("/todos/{task}")
+//    public ResponseEntity<Todo> delete (@PathVariable String task) {
+//        return ResponseEntity.ok(todoService.delete(task));
+//    }
 }

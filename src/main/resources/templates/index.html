@@ -2,141 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Current To-Do List</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f8ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 500px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #4682b4;
-            margin-bottom: 20px;
-        }
-
-        nav {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-
-        nav ul {
-            list-style-type: none;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 10px;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #4682b4;
-            font-weight: bold;
-        }
-
-        #logout {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 8px 15px;
-            background-color: #4682b4;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        #logout:hover {
-            background-color: #5a9bd3;
-        }
-
-        #task-list {
-            list-style: none;
-        }
-
-        .task-item {
-            background-color: #e0f7fa;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .task-item button {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .task-item button:hover {
-            background-color: #ff8787;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<nav>
-    <ul>
-        <li><a href="/">Current To-Do List</a></li>
-        <li><a href="/create-task">Add a Task</a></li>
-    </ul>
-</nav>
-<button id="logout">Log out</button>
+<div class="content">
+    <header>
+        <h1>To-Do List</h1>
+    </header>
+    <div class="search_con">
+        <label for="task_name">Task:</label>
+        <div class="search-wrapper">
+            <input type="text" id="task_name" placeholder="Enter">
+            <button id="search_btn" class="search-button"><i class="fas fa-search"></i></button>
+        </div>
 
-<div class="container">
-    <h1>Your Current To-Do List</h1>
-    <button id="sort-by-deadline">Sort by Deadline</button>
-    <ul id="task-list"></ul>
+        <label for="task_category">Category:</label>
+        <select id="task_category">
+            <option value="" disabled selected hidden>Select a category</option>
+            <option value="Personal">Personal</option>
+            <option value="School">School</option>
+            <option value="Work">Work</option>
+            <option value="Appointment">Appointment</option>
+        </select>
+
+        <label for="deadline">Date:</label>
+        <input type="date" id="deadline">
+
+        <div class="button_con">
+            <button id="add_task_btn" class="addTask" onclick="window.location.href='/create-task'">Add A Task</button>
+            <button id="logout_btn" class="LogOut">Log Out</button>
+        </div>
+    </div>
+    <div class="table_con">
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Task</th>
+                <th>Category</th>
+                <th>Deadline</th>
+                <th>Operation</th>
+            </tr>
+            </thead>
+            <tbody class="tab_body" id="task-list">
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<!-- Load JavaScript Files -->
+<script src="/js/utils.js"></script>
+<script src="/js/taskManager.js"></script>
+<script src="/js/modalManager.js"></script>
+<script src="/js/searchFilter.js"></script>
+<script src="/js/userManager.js"></script>
+<script src="/js/main.js"></script>
 
 <script>
     const taskList = document.getElementById('task-list');
-    const sortByDeadlineButton = document.getElementById('sort-by-deadline');
-    const logoutButton = document.getElementById('logout');
+    const logoutButton = document.getElementById('logout_btn');
 
-    // Redirect to login_signup.html on log out
-    logoutButton.addEventListener('click', function() {
-        window.location.href = '/logout';
+    // Logout button
+    logoutButton.addEventListener('click', async function() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                window.location.href = '/login';  // Redirect to login page after logout
+            } else {
+                throw new Error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
     });
 
-    // Load tasks from localStorage and display them
+    // Load tasks from the server and display them
     window.onload = function() {
         displayTasks();
     };
-
-    // Sort tasks by deadline when the sort button is clicked
-    sortByDeadlineButton.addEventListener('click', function() {
-        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
-        localStorage.setItem('tasks', JSON.stringify(tasks)); // Update localStorage after sorting
-        displayTasks(); // Re-render the task list
-    });
 
     async function displayTasks() {
         taskList.innerHTML = ''; // Clear the task list first
@@ -144,30 +92,39 @@
             .then((response) => response.json())
             .then((data) => {
                 data.forEach(task => {
-                    const taskItem = document.createElement('li');
-                    taskItem.classList.add('task-item');
+                    const taskItem = document.createElement('tr');
 
-                    const taskTextSpan = document.createElement('span');
-                    taskTextSpan.textContent = `${task.task} - ${task.category} - due by ${task.deadline}`;
+                    const taskText = document.createElement('td');
+                    taskText.textContent = task.task;
 
-                    // Create buttons for modifying and deleting tasks
+                    const taskCategory = document.createElement('td');
+                    taskCategory.textContent = task.category;
+
+                    const taskDeadline = document.createElement('td');
+                    taskDeadline.textContent = task.deadline;
+
+                    const operationCell = document.createElement('td');
                     const modifyButton = document.createElement('button');
                     modifyButton.textContent = 'Modify';
                     modifyButton.addEventListener('click', function() {
-                        modifyTask(task.id, task.task, task.category, task.deadline); // Pass task.id
+                        modifyTask(task.id, task.task, task.category, task.deadline);
                     });
 
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Delete';
                     deleteButton.addEventListener('click', function() {
-                        deleteTask(task.task).then(() => {
+                        deleteTask(task.id).then(() => {
                             displayTasks(); // Refresh the task list after deletion
                         });
                     });
 
-                    taskItem.appendChild(taskTextSpan);
-                    taskItem.appendChild(modifyButton);
-                    taskItem.appendChild(deleteButton);
+                    operationCell.appendChild(modifyButton);
+                    operationCell.appendChild(deleteButton);
+
+                    taskItem.appendChild(taskText);
+                    taskItem.appendChild(taskCategory);
+                    taskItem.appendChild(taskDeadline);
+                    taskItem.appendChild(operationCell);
                     taskList.appendChild(taskItem);
                 });
             });
@@ -204,8 +161,8 @@
         }
     }
 
-    async function deleteTask(task) {
-        const response = await fetch(`/todos/${task}`, {
+    async function deleteTask(taskId) {
+        const response = await fetch(`/todos/${taskId}`, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json"
@@ -218,7 +175,7 @@
 
         return response.json(); // Return the response to allow chaining
     }
-
 </script>
+
 </body>
 </html>

@@ -26,7 +26,6 @@ public class User implements Serializable {
     private String password;
     @Column(nullable = false, columnDefinition = "varchar(25) default 'USER'")
     private String role;
-
     @PrePersist
     public void prePersist() {
         if (role == null) {

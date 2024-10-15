@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add a Task</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f0f8ff;
+            background-color: #f0f8ff; /* Match the main theme */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -30,7 +27,7 @@
 
         h1 {
             text-align: center;
-            color: #4682b4;
+            color: #4682b4; /* Header color matching theme */
             margin-bottom: 20px;
         }
 
@@ -51,7 +48,7 @@
 
         nav ul li a {
             text-decoration: none;
-            color: #4682b4;
+            color: #4682b4; /* Link color matching theme */
             font-weight: bold;
         }
 
@@ -60,35 +57,33 @@
             top: 10px;
             right: 10px;
             padding: 8px 15px;
-            background-color: #4682b4;
+            background-color: #4682b4; /* Logout button color */
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            text-decoration: none;
         }
 
         #logout:hover {
-            background-color: #5a9bd3;
+            background-color: #5a9bd3; /* Logout button hover effect */
         }
 
         .input-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column; /* Stack inputs vertically */
             margin-bottom: 20px;
         }
 
         .input-container input, .input-container select {
-            width: calc(70% - 10px);
             padding: 10px;
-            border: 2px solid #4682b4;
+            border: 2px solid #4682b4; /* Input border color */
             border-radius: 5px;
             outline: none;
+            margin-bottom: 10px; /* Space between inputs */
         }
 
         #add-task-btn {
-            width: 30%;
-            background-color: #4682b4;
+            background-color: #4682b4; /* Add Task button color */
             color: white;
             border: none;
             padding: 10px;
@@ -98,107 +93,79 @@
         }
 
         #add-task-btn:hover {
-            background-color: #5a9bd3;
-        }
-
-        #task-list {
-            list-style: none;
-        }
-
-        .task-item {
-            background-color: #e0f7fa;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .task-item button {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .task-item button:hover {
-            background-color: #ff8787;
+            background-color: #5a9bd3; /* Add Task button hover effect */
         }
     </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="/">Current To-Do List</a></li>
-            <li><a href="/create-task">Add a Task</a></li>
-        </ul>
-    </nav>
-    <button id="logout">Log out</button>
+<nav>
+    <ul>
+        <li><a href="/">Current To-Do List</a></li>
+        <li><a href="/create-task">Add a Task</a></li>
+    </ul>
+</nav>
+<button id="logout">Log out</button>
 
-    <div class="container">
-        <h1>Add a New Task</h1>
-        
-        <!-- To-Do List Input Only -->
-        <div class="input-container">
-            <input type="text" id="new-task" placeholder="Add a new task...">
-            <select id="task-category">
-                <option value="Personal">Personal</option>
-                <option value="School">School</option>
-                <option value="Work">Work</option>
-                <option value="Appointment">Appointment</option>
-            </select>
-            <input type="date" id="task-deadline">
-            <button id="add-task-btn">Add Task</button>
-        </div>
+<div class="container">
+    <h1>Add a New Task</h1>
+
+    <div class="input-container">
+        <input type="text" id="new-task" placeholder="Add a new task..." required>
+        <select id="task-category">
+            <option value="Personal">Personal</option>
+            <option value="School">School</option>
+            <option value="Work">Work</option>
+            <option value="Appointment">Appointment</option>
+        </select>
+        <input type="date" id="task-deadline" required>
+        <input type="submit" id="add-task-btn" value="Add Task">
     </div>
+</div>
 
-    <script>
-        const newTaskInput = document.getElementById('new-task');
-        const addTaskButton = document.getElementById('add-task-btn');
-        const taskCategory = document.getElementById('task-category');
-        const taskDeadline = document.getElementById('task-deadline');
-        const logoutButton = document.getElementById('logout');
+<script>
+    const newTaskInput = document.getElementById('new-task');
+    const addTaskButton = document.getElementById('add-task-btn');
+    const taskCategory = document.getElementById('task-category');
+    const taskDeadline = document.getElementById('task-deadline');
+    const logoutButton = document.getElementById('logout');
 
-        // Redirect to login_signup.html on log out
-        logoutButton.addEventListener('click', function() {
-            window.location.href = '/logout';
-        });
+    logoutButton.addEventListener('click', function() {
+        window.location.href = '/logout';
+    });
 
-        // Load tasks from localStorage when the page loads
-        window.onload = function() {};
+    addTaskButton.addEventListener('click', async function () {
+        const taskText = newTaskInput.value.trim();
+        const category = taskCategory.value;
+        const deadline = taskDeadline.value;
 
-        addTaskButton.addEventListener('click', function () {
-            const taskText = newTaskInput.value.trim();
-            const category = taskCategory.value;
-            const deadline = taskDeadline.value;
+        if (taskText === '') return;
 
-            if (taskText === '') return;
-
-            saveTodo(taskText, category, deadline);
-
-            newTaskInput.value = '';
-            taskCategory.value = 'Personal';
-            taskDeadline.value = '';
-        });
-
-        async function saveTodo(text, category, deadline) {
-            await fetch("/todos", {
-                method: "POST",
-                body: JSON.stringify({
-                    task: text,
-                    category: category,
-                    deadline: deadline
-                }),
-                headers: {
-                    "Content-type": "application/json"
-                }
-            })
-                .then((response) => response.json())
-                .then((json) => console.log(json));
+        const success = await saveTodo(taskText, category, deadline);
+        if (success) {
+            window.location.href = '/'; // Redirect to home after adding task
         }
-    </script>
+    });
+
+    async function saveTodo(text, category, deadline) {
+        const response = await fetch("/todos", {
+            method: "POST",
+            body: JSON.stringify({
+                task: text,
+                category: category,
+                deadline: deadline
+            }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            return true; // Indicate success
+        } else {
+            console.error("Error saving task:", await response.text());
+            return false; // Indicate failure
+        }
+    }
+</script>
 </body>
 </html>

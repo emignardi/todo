@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class RegistrationController {
@@ -17,8 +20,12 @@ public class RegistrationController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
+        HashMap<String, Object> response = new HashMap<>();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return ResponseEntity.ok(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        response.put("success", true);
+//        response.put("User", savedUser);
+        return ResponseEntity.ok(response);
     }
 }
