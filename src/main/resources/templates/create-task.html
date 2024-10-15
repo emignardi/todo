@@ -129,8 +129,21 @@
     const taskDeadline = document.getElementById('task-deadline');
     const logoutButton = document.getElementById('logout');
 
-    logoutButton.addEventListener('click', function() {
-        window.location.href = '/logout';
+    // Logout button
+    logoutButton.addEventListener('click', async function() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                window.location.href = '/login';  // Redirect to login page after logout
+            } else {
+                throw new Error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
     });
 
     addTaskButton.addEventListener('click', async function () {
