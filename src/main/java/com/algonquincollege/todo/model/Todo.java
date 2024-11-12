@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @Table(name = "Todo")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Todo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
