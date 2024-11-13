@@ -25,19 +25,19 @@ public class TodoController {
         return ResponseEntity.ok(todoService.findById(id));
     }
 
-    @GetMapping("/todos/sorted")
-    public ResponseEntity<List<Todo>> findAllSorted() {
-        List<Todo> sortedTodos = todoService.findAll()
-                .stream()
-                .sorted(Comparator.comparing(Todo::getDeadline))
-                .toList();
-        return ResponseEntity.ok(sortedTodos);
-    }
+//    @GetMapping("/todos/sorted")
+//    public ResponseEntity<List<Todo>> findAllSorted() {
+//        List<Todo> sortedTodos = todoService.findAll()
+//                .stream()
+//                .sorted(Comparator.comparing(Todo::getDeadline))
+//                .toList();
+//        return ResponseEntity.ok(sortedTodos);
+//    }
 
-    @GetMapping("/todos/{task}")
-    public ResponseEntity<Todo> findByTask(@PathVariable String task) {
-        return ResponseEntity.ok(todoService.findByTask(task));
-    }
+//    @GetMapping("/todos/{task}")
+//    public ResponseEntity<Todo> findByTask(@PathVariable String task) {
+//        return ResponseEntity.ok(todoService.findByTask(task));
+//    }
 
     @PostMapping("/todos")
     public ResponseEntity<Todo> create (@RequestBody Todo todo) {

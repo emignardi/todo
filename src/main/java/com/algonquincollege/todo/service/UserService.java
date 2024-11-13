@@ -26,12 +26,11 @@ public class UserService {
     }
 
     public User update(Long id, User user) {
-        return userRepository.findById(id)
-                .map(updatedUser -> {
-                    updatedUser.setFirstName(user.getFirstName());
-                    updatedUser.setLastName(user.getLastName());
-                    return userRepository.save(updatedUser);
-                }).orElseThrow(IllegalArgumentException::new);
+        User updatedUser = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+        userRepository.save(updatedUser);
+        return updatedUser;
     }
 
     public User delete(Long id) {
