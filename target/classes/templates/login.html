@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<div class="content">
+    <div class="mark">
+        <div class="login_ipt">
+            <h1 class="title">Hello, Welcome back!</h1>
+            <h2 class="sm_title">LOGIN</h2>
+
+            <form id="login-form" action="/login" method="post">
+                <label for="username">Username</label>
+                <input type="text" id="username" class="ipt" name="username" placeholder="Username" required>
+                <br>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" class="ipt" name="password" placeholder="Password" required>
+                <br>
+
+                <div class="register_con">
+                    <a href="/registration">Register an account</a>
+                </div>
+
+                <!-- CSRF Token -->
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                <input type="submit" class="login_btn" value="LOGIN">
+            </form>
+            <div id="message"></div> <!-- For displaying messages -->
+        </div>
+    </div>
+</div>
+
+<!-- Load JavaScript Files -->
+<script src="/js/utils.js"></script>
+<script src="/js/userManager.js"></script>
+
+</body>
+</html>

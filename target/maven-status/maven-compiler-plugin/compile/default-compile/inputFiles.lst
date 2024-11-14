@@ -1,0 +1,13 @@
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\configuration\CustomUserDetailsService.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\configuration\SecurityConfig.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\controller\HomeController.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\controller\RegistrationController.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\controller\TodoController.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\controller\UserController.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\model\Todo.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\model\User.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\repository\TodoRepository.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\repository\UserRepository.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\service\TodoService.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\service\UserService.java
+C:\Users\migna\Downloads\todo\todo\src\main\java\com\algonquincollege\todo\TodoApplication.java

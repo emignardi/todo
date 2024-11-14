@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/register.css">
+</head>
+<body>
+<div class="content">
+  <div class="mark">
+    <div class="login_ipt">
+      <h1 class="title">Hello, Welcome!</h1>
+      <h2 class="sm_title">REGISTER</h2>
+
+      <label for="first-name">First Name</label>
+      <input type="text" id="first-name" class="ipt" placeholder="First Name" required>
+      <br>
+
+      <label for="last-name">Last Name</label>
+      <input type="text" id="last-name" class="ipt" placeholder="Last Name" required>
+      <br>
+
+      <label for="username">Username</label>
+      <input type="text" id="username" class="ipt" placeholder="Username" required>
+      <br>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" class="ipt" placeholder="Password" required>
+      <br>
+
+      <div class="register_con">
+        <a href="/login">Go to login</a>
+      </div>
+      <button class="register_btn" id="register-button">SUBMIT</button>
+      <div id="message"></div> <!-- Added for error/success messages -->
+    </div>
+  </div>
+</div>
+
+<!-- Load JavaScript Files -->
+<script src="/js/utils.js"></script>
+<script src="/js/userManager.js"></script>
+<script>
+  document.getElementById('register-button').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const formData = {
+      firstName: document.getElementById('first-name').value,
+      lastName: document.getElementById('last-name').value,
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+    };
+
+    fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert('Registration successful!');
+                window.location.href = '/login'; // Redirect to login page
+              } else {
+                document.getElementById('message').innerText = data.message || 'Registration failed.';
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              document.getElementById('message').innerText = 'An error occurred. Please try again.';
+            });
+  });
+</script>
+
+</body>
+</html>

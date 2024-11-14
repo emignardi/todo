@@ -1,0 +1,5 @@
+com\algonquincollege\todo\controller\UserControllerTest.class
+com\algonquincollege\todo\TodoApplicationTests.class
+com\algonquincollege\todo\service\TodoServiceTest.class
+com\algonquincollege\todo\service\UserServiceTest.class
+com\algonquincollege\todo\controller\TodoControllerTest.class

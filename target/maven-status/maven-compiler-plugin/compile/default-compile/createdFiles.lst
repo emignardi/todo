@@ -1,0 +1,13 @@
+com\algonquincollege\todo\service\UserService.class
+com\algonquincollege\todo\repository\TodoRepository.class
+com\algonquincollege\todo\configuration\CustomUserDetailsService.class
+com\algonquincollege\todo\service\TodoService.class
+com\algonquincollege\todo\model\Todo.class
+com\algonquincollege\todo\controller\TodoController.class
+com\algonquincollege\todo\repository\UserRepository.class
+com\algonquincollege\todo\controller\HomeController.class
+com\algonquincollege\todo\model\User.class
+com\algonquincollege\todo\controller\UserController.class
+com\algonquincollege\todo\configuration\SecurityConfig.class
+com\algonquincollege\todo\controller\RegistrationController.class
+com\algonquincollege\todo\TodoApplication.class

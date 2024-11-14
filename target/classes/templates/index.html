@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Current To-Do List</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="content">
+    <header>
+        <h1>To-Do List</h1>
+    </header>
+    <div class="search_con">
+        <label for="task_name">Task:</label>
+        <div class="search-wrapper">
+            <input type="text" id="task_name" placeholder="Enter">
+            <button id="search_btn" class="search-button"><i class="fas fa-search"></i></button>
+        </div>
+
+        <label for="task_category">Category:</label>
+        <select id="task_category">
+            <option value="" disabled selected hidden>Select a category</option>
+            <option value="Personal">Personal</option>
+            <option value="School">School</option>
+            <option value="Work">Work</option>
+            <option value="Appointment">Appointment</option>
+        </select>
+
+        <label for="deadline">Date:</label>
+        <input type="date" id="deadline">
+
+        <div class="button_con">
+            <button id="add_task_btn" class="addTask" onclick="window.location.href='/create-task'">Add A Task</button>
+            <button id="logout_btn" class="LogOut">Log Out</button>
+        </div>
+    </div>
+    <div class="table_con">
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Task</th>
+                <th>Category</th>
+                <th>Deadline</th>
+                <th>Operation</th>
+            </tr>
+            </thead>
+            <tbody class="tab_body" id="task-list">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Load JavaScript Files -->
+<script src="/js/utils.js"></script>
+<script src="/js/taskManager.js"></script>
+<script src="/js/modalManager.js"></script>
+<script src="/js/searchFilter.js"></script>
+<script src="/js/userManager.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+    const taskList = document.getElementById('task-list');
+    const logoutButton = document.getElementById('logout_btn');
+
+    // Logout button
+    logoutButton.addEventListener('click', async function() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                window.location.href = '/login';  // Redirect to login page after logout
+            } else {
+                throw new Error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    });
+
+    // Load tasks from the server and display them
+    window.onload = function() {
+        displayTasks();
+    };
+
+    async function displayTasks() {
+        taskList.innerHTML = ''; // Clear the task list first
+        const response = await fetch("/todos")
+            .then((response) => response.json())
+            .then((data) => {
+                data.forEach(task => {
+                    const taskItem = document.createElement('tr');
+
+                    const taskText = document.createElement('td');
+                    taskText.textContent = task.task;
+
+                    const taskCategory = document.createElement('td');
+                    taskCategory.textContent = task.category;
+
+                    const taskDeadline = document.createElement('td');
+                    taskDeadline.textContent = task.deadline;
+
+                    const operationCell = document.createElement('td');
+                    const modifyButton = document.createElement('button');
+                    modifyButton.textContent = 'Modify';
+                    modifyButton.addEventListener('click', function() {
+                        modifyTask(task.id, task.task, task.category, task.deadline);
+                    });
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', function() {
+                        deleteTask(task.id).then(() => {
+                            displayTasks(); // Refresh the task list after deletion
+                        });
+                    });
+
+                    operationCell.appendChild(modifyButton);
+                    operationCell.appendChild(deleteButton);
+
+                    taskItem.appendChild(taskText);
+                    taskItem.appendChild(taskCategory);
+                    taskItem.appendChild(taskDeadline);
+                    taskItem.appendChild(operationCell);
+                    taskList.appendChild(taskItem);
+                });
+            });
+    }
+
+    async function modifyTask(taskId, text, category, deadline) {
+        const newText = prompt("Modify task text:", text);
+        const newCategory = prompt("Modify task category:", category);
+        const newDeadline = prompt("Modify task deadline (YYYY-MM-DD):", deadline);
+
+        const updatedTask = {
+            task: newText || text,
+            category: newCategory || category,
+            deadline: newDeadline || deadline
+        };
+
+        try {
+            const response = await fetch(`/todos/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedTask)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            await response.json(); // Optionally process the response
+            displayTasks(); // Refresh the task list
+        } catch (error) {
+            console.error('Error modifying task:', error);
+        }
+    }
+
+    async function deleteTask(taskId) {
+        const response = await fetch(`/todos/${taskId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete task');
+        }
+
+        return response.json(); // Return the response to allow chaining
+    }
+</script>
+
+</body>
+</html>
