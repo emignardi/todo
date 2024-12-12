@@ -17,6 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * The Class SecurityConfig is the main configuration class used to set up Spring Security for the application.
+ */
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,6 +28,13 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
 
+    /**
+     * Handles authorization based on specific URL paths and also specifies login related information such as the designated login path and the path to return to after successful login.
+     * @param http
+     *              the HTTPSecurity object used to build the security configuration
+     * @return the SecurityFilterChain
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -56,11 +67,19 @@ public class SecurityConfig {
 //        return new InMemoryUserDetailsManager(user, user2);
 //    }
 
+    /**
+     * The method providing a UserDetailsService to Spring Security using the CustomUserDetailsService we created/provided
+     * @return the UserDetailsService for handling locating users and from which creates a UserDetails object
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         return userDetailsService;
     }
 
+    /**
+     * The AuthenticationProvider (specifically the DoaAuthenticationProvider) which is configured using the CustomUserDetailsService and the BCrypt password encoder.
+     * @return the AuthenticationProvider
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -69,6 +88,10 @@ public class SecurityConfig {
         return provider;
     }
 
+    /**
+     * The PasswordEncoder for encoded the passwords of a User for protection.
+     * @return the BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

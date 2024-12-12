@@ -10,12 +10,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * The Class CustomUserDetailsService is responsible for locating users using the UserRepository in order to create Spring Security "Users" using a username, password, and role.
+ */
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Locates a stored user using a username and creates a Spring Security "User".
+     * @param username
+     *                  the username used to locate a stored user.
+     * @return the User which implements the UserDetails interface
+     * @throws UsernameNotFoundException if the user does not exist
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
@@ -31,6 +42,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
+    /**
+     * Parses the list of strings containing a Users' roles.
+     * @param user
+     *              the User model object containing roles
+     * @return the String array containing the Users' roles
+     */
     private String[] getRoles(User user) {
         if (user.getRole() == null) {
             return new String[]{"USER"};

@@ -4,6 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * The Class HomeController handles the forwarding of application users to specific pages based on the URL path.
+ * <br>
+ * The class contains routes for navigating to the index (home), login, task creation, and registration pages.
+ */
+
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
